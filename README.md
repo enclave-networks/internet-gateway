@@ -10,24 +10,24 @@ You will need:
 
 1. Install necessary packages
 
-```bash
-sudo apt update
-sudo apt install gh
-```
+    ```bash
+    sudo apt update
+    sudo apt install gh
+    ```
 
 1. Clone this repository
 
-```bash
-git clone https://github.com/enclave-networks/internet-gateway.git
-```
+    ```bash
+    git clone https://github.com/enclave-networks/internet-gateway.git
+    ```
 
 1. Install Enclave, Docker, and other dependencies
 
-```bash
-cd internet-gateway/
-chmod +x *.sh
-sudo ./prepare-host.sh
-```
+    ```bash
+    cd internet-gateway/
+    chmod +x *.sh
+    sudo ./prepare-host.sh
+    ```
 
 Note that the `prepare-host.sh` script can be customized. By default, it prepares the OS by installing required dependencies, Docker, and Enclave. You can also enable the script to install the NetData agent, restrict SSH access for root, and enable unattended security updates.
 
