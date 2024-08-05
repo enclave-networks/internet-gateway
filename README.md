@@ -69,9 +69,9 @@ Checking for enrolled Internet Gateways...
 
 ### 2. Generate a new Internet Gateway Docker stack
 
-On your linux server, use the enrolment key to create a Docker stack for the primary and secondary Internet Gateways.
+On your Ubuntu server, we'll now use the Enrolment Key from step 1 to create a Docker stack for the primary and secondary Internet Gateways.
 
-In this example our Internet Gateways are for "Acme Labs", this will be used as the directory name where the `docker-compose.yml` files will be built for this stack:
+In this example our Internet Gateways are going to be for "Acme Labs", this name will be used as the directory name where the `docker-compose.yml` files will be built for each Internet Gateway in this stack:
 
 ```
 sudo ./generate-stack.sh -c "ACME Labs" -g -k AAAAA-AAAAA-AAAAA-AAAAA-AAAAA
