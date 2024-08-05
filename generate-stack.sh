@@ -127,14 +127,10 @@ if [ ! -d "$STACK_PATH" ]; then
     mkdir -p $PRIMARY_PATH/etc/pihole
     mkdir -p $SECONDARY_PATH/etc/pihole
 
-    mkdir -p $PRIMARY_PATH/certs/
-    mkdir -p $SECONDARY_PATH/certs/
+    cp -r $PKI_PATH $PRIMARY_PATH/certs
+    cp -r $PKI_PATH $SECONDARY_PATH/certs
 
-    cp -r $PKI_PATH/gateway.crt $PRIMARY_PATH/certs/
-    cp -r $PKI_PATH/gateway.p7b $PRIMARY_PATH/certs/
-    
-    cp -r $PKI_PATH/gateway.crt $SECONDARY_PATH/certs/
-    cp -r $PKI_PATH/gateway.p7b $SECONDARY_PATH/certs/
+    rm -rf $PKI_PATH
 
     cp -r ./template/blockpage "$PRIMARY_PATH"
     cp -r ./template/blockpage "$SECONDARY_PATH"
