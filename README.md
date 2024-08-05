@@ -96,7 +96,7 @@ DOCKER_BRIDGE_NAME:               rarlx656iq_n
 
 Both the primary and secondary Docker stacks for each Internet Gateway have been built in the `./stacks/acme_labs` directory.
 
-Note that each stack directory contains a copy of the Trusted Root Certificate Authority certificate `gateway.crt`, and it's corresponding private `gateway.key` file. Only the Docker stack needs access to the private key file. The public certificate will need to be downloaded and installed into the `Trusted Root Certification Authorities` of the `Local Machine` for end-users.
+Note that each stack directory contains a copy of the **public** Trusted Root Certificate Authority certificate `gateway.crt`, and it's corresponding **private** `gateway.key` file. Only the Docker stack needs access to the private key file. The public certificate will need to be downloaded and installed into the `Trusted Root Certification Authorities` of the `Local Machine` for end-users.
 
 If you generated the stack locally, move each stack directory to it's correct location / server now. We recommend separate hardware for each Internet Gateway, but it's perfectly possible to run both stacks on the same host OS.
 
