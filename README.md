@@ -105,7 +105,7 @@ If you generated the stack locally, move each stack directory to it's correct lo
 
 ### 3. Deploy the stack(s)
 
-The first time you deploy a new stack, you should run the `initialise-bridge-network.sh` file to setup iptables and the docker bridge network:
+The first time you deploy a new stack, you should run the `initialise-bridge-network.sh` file on each host server to setup iptables and the docker network bridge network:
 
 ```bash
 user@DC2-UBUNTU-12:~$ cd stacks/acme_labs/primary-gateway/
