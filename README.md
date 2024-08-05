@@ -55,7 +55,7 @@ On Windows, run `configure-tenant.ps1` passing in your `orgId` and `apiKey`.
 .\configure-tenant.ps1 -orgId abcdefghijklmnopqrstuvwxyz012345 -apiKey abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0
 ```
 
-The PowerShell script will create an API key valid for one hour and two system enrolments in the target tenant:
+The PowerShell script will create an Enrolment Key that's valid for one hour and two system enrolments in the target tenant:
 
 ```
 Checking for enrolled Internet Gateways...
