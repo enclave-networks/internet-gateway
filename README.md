@@ -8,13 +8,6 @@ You will need:
 
 ## Prepare the host
 
-1. Install necessary packages
-
-    ```bash
-    sudo apt update
-    sudo apt install gh
-    ```
-
 1. Clone this repository
 
     ```bash
