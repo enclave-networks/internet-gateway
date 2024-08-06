@@ -127,13 +127,13 @@ docker bridge network uwhzjej7gw_n for this stack already exists, nothing to do.
 iptables snat rule 172.17.0.0/16 for this stack already exists, nothing to do.
 ```
 
-Now we can ask Docker to bring the stack online:
+Now we can ask Docker to bring the primary gateway online:
 
 ```bash
 sudo docker compose up -d
 ```
 
-Repeat these steps for the Secondary Internet Gateway so that both Internet Gateways present as online in the Enclave Portal.
+Repeat this step for the secondary Internet Gateway, so that both Internet Gateways enrolled and show as online in the Enclave Portal before proceeding.
 
 ### 4. Configure Internet Gateway policies in the Enclave Tenant
 
