@@ -187,8 +187,6 @@ Download the Internet Gateway CA's public certificate in the appropriate format 
 - http://dnsfilter.enclave/gateway.crt
 - http://dnsfilter.enclave/gateway.p7b
 
-On Windows, use the `certmgr` tool to install `gateway.crt` into the `Trusted Root Certification Authorities` store using the `LOCAL COMPUTER` scope and restart your browser.
-
-Navigate to [http://dnsfilter.enclave](http://dnsfilter.enclave) and check you don't receive any certificate warnings.
+On Windows, use the `certmgr` tool to install `gateway.crt` into the `Trusted Root Certification Authorities` store using the `LOCAL COMPUTER` scope and restart your browser. Navigate to [http://dnsfilter.enclave](http://dnsfilter.enclave) and check you don't receive any certificate warnings.
 
 To test if your network traffic is successfully routing through the Internet Gateway, check your external IP address and then apply the `[internet-gateway-user]` tag to your system. Your Internet traffic should now be routing through the Internet Gateways.
