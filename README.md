@@ -196,7 +196,7 @@ To test if your network traffic is successfully routing through the Internet Gat
 ## Operational notes
 
 - Failover between gateways is automatic. If one fails or goes offline, connected systems will automatically switch.
-- Notice the `300M` docker [memory limit](https://github.com/enclave-networks/internet-gateway/blob/main/template/docker-compose.primary.yml#L13) applied to the Enclave container.
+- Notice the `300M` docker [memory limit](https://github.com/enclave-networks/internet-gateway/blob/main/template/docker-compose.primary.yml#L13) applied to the Enclave container and increase as required.
 - Only make PiHole configuration changes to the primary gateway, the PiHole configuration in [synced](https://github.com/enclave-networks/internet-gateway/blob/main/template/docker-compose.primary.yml#L124) to the secondary every 30 minutes.
 
 ## Inspection
