@@ -211,7 +211,7 @@ sudo iptables -t nat -L POSTROUTING -v -n
 
 ### Uninstall
 
-Warning: Read these commands **BEFORE** you run them. If you don't understand what they will do, contact us on our support channels for assistance.
+!!! Warning: Read these commands **BEFORE** you run them. If you don't understand exactly what they will do, contact us on our support channels for assistance.
 
 ```bash
 sudo docker stop $(sudo docker ps -q) && sudo docker rm $(sudo docker ps -aq)
