@@ -139,11 +139,11 @@ Repeat this step for the secondary Internet Gateway, so that both Internet Gatew
 
 Back in your Windows environment, the same script from step 1, `configure-tenant.ps1` can now be run a second time. As before, pass the same `orgId` and `apiKey`.
 
+This time, the script will detect the presence of the newly enrolled Internet Gateways and instead of generating an enrolment key, it will configure the required Tags, Policies and DNS Records in the tenant to enable the Internet Gateways to function as intended.
+
 ```shell
 .\configure-tenant.ps1 -orgId abcdefghijklmnopqrstuvwxyz012345 -apiKey abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0
 ```
-
-This time, the script will detect the presence of the newly enrolled Internet Gateways and instead of generating an enrolment key, it will configure the required Tags, Policies and DNS Records in the tenant to enable the Internet Gateways to function as intended.
 
 Expect to see output similar to:
 
