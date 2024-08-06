@@ -190,3 +190,33 @@ Download the Internet Gateway CA's public certificate in the appropriate format 
 On Windows, use the `certmgr` tool to install `gateway.crt` into the `Trusted Root Certification Authorities` store using the `LOCAL COMPUTER` scope and restart your browser. Navigate to [http://dnsfilter.enclave](http://dnsfilter.enclave) and check you don't receive any certificate warnings.
 
 To test if your network traffic is successfully routing through the Internet Gateway, check your external IP address and then apply the `[internet-gateway-user]` tag to your system. Your Internet traffic should now be routing through the Internet Gateways and your external IP address should have changed to present as that of the primary Internet Gateway.
+
+# Advanced
+
+## Operational notes
+
+- Failover between gateways is automatic. If one fails or goes offline, connected systems will automatically switch.
+- Only make PiHole configuration changes to the primary gateway, the configuration in synced to the secondary every 30 minutes.
+- Notice the `300M` docker [memory limit](https://github.com/enclave-networks/internet-gateway/blob/main/template/docker-compose.primary.yml#L13) applied to the Enclave container.
+
+## Inspection
+
+To inspect the running environment, the docker commands `ps`, `exec`, `stats` qand `logs` can be helpful.
+
+To inspect iptables snat run:
+
+```bash
+sudo iptables -t nat -L POSTROUTING -v -n
+```
+
+### Uninstall
+
+Warning: Read these commands **BEFORE** you run them. If you don't understand what they will do, contact us on our support channels for assistance.
+
+```bash
+sudo docker stop $(sudo docker ps -q) && sudo docker rm $(sudo docker ps -aq)
+sudo docker network rm $(sudo docker network ls -q)
+sudo docker volume rm $(docker volume ls -qf dangling=true)
+sudo iptables -t nat -S POSTROUTING | grep "_n" | sed 's/^-A /-D /' | while read -r line; do sudo iptables -t nat $line; done
+sudo rm -rf ./stacks/
+```
