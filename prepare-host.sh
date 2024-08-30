@@ -93,7 +93,8 @@ if [ "$DO_INSTALL_NETDATA" = "true" ]; then
 
     if [ -z "$NETDATA_CLOUD_CLAIM_TOKEN" ]; then
 
-        echo "Error: Cannot install netdata agent, NETDATA_CLOUD_CLAIM_TOKEN is required."
+        echo "Info: Cannot connect to the Netdata Cloud without a NETDATA_CLOUD_CLAIM_TOKEN. Installing locally only."
+        wget -O /tmp/netdata-kickstart.sh https://get.netdata.cloud/kickstart.sh && sh /tmp/netdata-kickstart.sh --stable-channel
 
     else
 

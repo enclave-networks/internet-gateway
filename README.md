@@ -198,7 +198,7 @@ To test if your network traffic is successfully routing through the Internet Gat
 - Failover between gateways is automatic. If one fails or goes offline, connected systems will automatically switch.
 - You may need to disable `Use secure DNS` in Chrome (`chrome://settings/security`) to stop it sending DNS queries directly to Google nameservers.
 - Notice the `300M` docker [memory limit](https://github.com/enclave-networks/internet-gateway/blob/main/template/docker-compose.primary.yml#L13) applied to the Enclave container and increase as required.
-- Only make PiHole configuration changes to the primary gateway, the PiHole configuration in [synced](https://github.com/enclave-networks/internet-gateway/blob/main/template/docker-compose.primary.yml#L124) to the secondary every 30 minutes.
+- Only make PiHole configuration changes on the _primary_ gateway as the PiHole configuration in [synced](https://github.com/enclave-networks/internet-gateway/blob/main/template/docker-compose.primary.yml#L124) _from_ the primary to the secondary every 30 minutes.
 
 ## Inspection
 
