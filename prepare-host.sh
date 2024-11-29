@@ -33,7 +33,7 @@ if [ "$DO_PREPARE_OS" = "true" ]; then
 
     apt update && apt upgrade -y
     apt install -y needrestart
-    apt install -y gcc make tzdata jq iputils-ping net-tools iperf3 tcpdump telnet unzip wget screen software-properties-common gnupg
+    apt install -y gcc make tzdata jq iputils-ping net-tools iperf3 tcpdump telnet unzip wget screen software-properties-common gnupg speedtest-cli
 
     timedatectl set-ntp on
     timedatectl set-timezone UTC
