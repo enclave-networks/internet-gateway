@@ -1,0 +1,94 @@
+#!/bin/bash
+
+# Function to find the default route's interface name
+default_interface() {
+  route get default 2>/dev/null | awk '/interface: / {print $2}'
+}
+
+# Function to fetch the user-friendly interface name for networksetup
+user_friendly_interface() {
+  local system_interface="$1"
+  networksetup -listallhardwareports | awk -v iface="$system_interface" '
+    $0 ~ "Hardware Port" {port=$3}
+    $0 ~ iface {print port}
+  '
+}
+
+# Function to fetch current DHCP nameservers for a given interface
+dhcp_nameservers() {
+  local interface="$1"
+  ipconfig getpacket "$interface" 2>/dev/null | awk '/domain_name_server/ {gsub(/[{}]/, "", $3); for (i=3; i<=NF; i++) print $i}'
+}
+
+# Function to renew the DHCP lease for a given interface
+dhcp_renew() {
+  local interface="$1"
+  sudo networksetup -renewdhcp "$interface"
+}
+
+# Function to configure DNS using networksetup
+configure_dns() {
+  local interface="$1"
+  shift
+  local dns_servers=("$@")
+
+  echo "Configuring DNS for interface $interface with the following order of nameservers:"
+  for server in "${dns_servers[@]}"; do
+    echo "  - $server"
+  done
+
+  sudo networksetup -setdnsservers "$interface" ${dns_servers[@]}
+}
+
+# Main script logic
+main() {
+  echo "Determining default network interface..."
+  local system_interface=$(default_interface)
+
+  if [ -z "$system_interface" ]; then
+    echo "Error: Could not determine the default network interface."
+    exit 1
+  fi
+
+  echo "Default system interface: $system_interface"
+
+  local user_friendly=$(user_friendly_interface "$system_interface")
+
+  if [ -z "$user_friendly" ]; then
+    echo "Error: Could not determine the user-friendly interface name."
+    exit 1
+  fi
+
+  echo "User-friendly interface: $user_friendly"
+
+  echo "Fetching current DHCP nameservers for $system_interface..."
+  local dhcp_servers=($(dhcp_nameservers "$system_interface"))
+
+  if [ -z "$dhcp_servers" ]; then
+    echo "Error: Could not fetch DHCP nameservers."
+    dhcp_renew "$user_friendly"
+    dhcp_servers=($(dhcp_nameservers "$system_interface"))
+    if [ -z "$dhcp_servers" ]; then
+      echo "Error: DHCP renew failed to provide nameservers."
+      exit 1
+    fi
+  fi
+
+  echo "DHCP nameservers: ${dhcp_servers[@]}"
+
+  echo "Attempting to retrieve Enclave nameserver IP..."
+  local enclave_ip=$(enclave get-ip 2>/dev/null)
+
+  if [ $? -ne 0 ] || [ -z "$enclave_ip" ]; then
+    echo "Enclave get-ip failed. Using only DHCP nameservers."
+    configure_dns "$user_friendly" "${dhcp_servers[@]}"
+  else
+    echo "Enclave nameserver: $enclave_ip"
+    configure_dns "$user_friendly" "$enclave_ip" "${dhcp_servers[@]}"
+  fi
+
+  echo "DNS configuration updated successfully."
+}
+
+# Run the main function
+main
