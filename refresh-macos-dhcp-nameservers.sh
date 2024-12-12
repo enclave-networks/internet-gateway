@@ -40,12 +40,11 @@ configure_dns() {
   sudo networksetup -setdnsservers "$interface" "${dns_servers[@]}"
 }
 
-# Main script logic
 main() {
 
   # Exit if not macOS
   if [[ "$(uname)" != "Darwin" ]]; then
-    echo "This script is used to refresh the DHCP allocated nameservers on macOS only."
+    echo "This script is used to refresh the DHCP allocated nameservers on macOS."
     exit 0
   fi
 
