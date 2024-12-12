@@ -37,7 +37,7 @@ configure_dns() {
     echo "  - $server"
   done
 
-  sudo networksetup -setdnsservers "$interface" ${dns_servers[@]}
+  sudo networksetup -setdnsservers "$interface" "${dns_servers[@]}"
 }
 
 # Main script logic
@@ -46,7 +46,7 @@ main() {
   local system_interface=$(default_interface)
 
   if [ -z "$system_interface" ]; then
-    echo "Error: Could not determine the default network interface."
+    echo "No default network interface found, cannot refresh DNS configuration."
     exit 1
   fi
 
@@ -55,7 +55,7 @@ main() {
   local user_friendly=$(user_friendly_interface "$system_interface")
 
   if [ -z "$user_friendly" ]; then
-    echo "Error: Could not determine the user-friendly interface name."
+    echo "Could not determine user-friendly interface name, cannot refresh DNS configuration."
     exit 1
   fi
 
@@ -65,11 +65,11 @@ main() {
   local dhcp_servers=($(dhcp_nameservers "$system_interface"))
 
   if [ -z "$dhcp_servers" ]; then
-    echo "Error: Could not fetch DHCP nameservers."
+    echo "No DHCP nameservers found. Attempting to renew DHCP lease."
     dhcp_renew "$user_friendly"
     dhcp_servers=($(dhcp_nameservers "$system_interface"))
     if [ -z "$dhcp_servers" ]; then
-      echo "Error: DHCP renew failed to provide nameservers."
+      echo "No DHCP nameservers available after renew, cannot refresh DNS configuration."
       exit 1
     fi
   fi
@@ -80,7 +80,7 @@ main() {
   local enclave_ip=$(enclave get-ip 2>/dev/null)
 
   if [ $? -ne 0 ] || [ -z "$enclave_ip" ]; then
-    echo "Enclave get-ip failed. Using only DHCP nameservers."
+    echo "No Enclave nameserver found, configuring DHCP assigned nameservers only."
     configure_dns "$user_friendly" "${dhcp_servers[@]}"
   else
     echo "Enclave nameserver: $enclave_ip"
