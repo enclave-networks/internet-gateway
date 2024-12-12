@@ -42,6 +42,13 @@ configure_dns() {
 
 # Main script logic
 main() {
+
+  # Exit if not macOS
+  if [[ "$(uname)" != "Darwin" ]]; then
+    echo "This script is used to refresh the DHCP allocated nameservers on macOS only."
+    exit 0
+  fi
+
   echo "Determining default network interface..."
   local system_interface=$(default_interface)
 
