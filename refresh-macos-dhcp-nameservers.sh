@@ -9,8 +9,9 @@ default_interface() {
 user_friendly_interface() {
   local system_interface="$1"
   networksetup -listallhardwareports | awk -v iface="$system_interface" '
-    $0 ~ "Hardware Port" {port=$3}
-    $0 ~ iface {print port}
+    BEGIN { hardware_port = "" }
+    /^Hardware Port:/ { hardware_port = substr($0, index($0, $3)) }
+    /^Device:/ && $2 == iface { print hardware_port; exit }
   '
 }
 
