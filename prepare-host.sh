@@ -76,7 +76,7 @@ EOF
 fi
 
 # install enclave
-if [ "$DO_PREPARE_OS" = "true" ]; then
+if [ "$DO_INSTALL_ENCLAVE" = "true" ]; then
 
     curl -fsSL https://packages.enclave.io/apt/enclave.stable.gpg | gpg --dearmor -o /usr/share/keyrings/enclave.gpg
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/enclave.gpg] https://packages.enclave.io/apt stable main" | tee /etc/apt/sources.list.d/enclave.stable.list
