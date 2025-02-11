@@ -130,7 +130,7 @@ iptables snat rule 172.17.0.0/16 for this stack already exists, nothing to do.
 Now we can ask Docker to bring the primary gateway online:
 
 ```bash
-sudo docker compose up -d
+sudo docker compose up -d --pull always
 ```
 
 Repeat this step for the secondary Internet Gateway, so that both Internet Gateways enrolled and show as online in the Enclave Portal before proceeding.
