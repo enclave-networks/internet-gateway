@@ -285,10 +285,6 @@ $policiesModel = @(
                 protocol = "Tcp"
                 ports = "443"
                 description = "HTTPS"
-            },
-            @{
-                protocol = "Icmp"
-                description = "PiHole"
             }
         )
     },
@@ -316,7 +312,7 @@ $policiesModel = @(
             },
             @{
                 protocol = "Icmp"
-                description = "PiHole"
+                description = "Icmp"
             }
         )
     }
@@ -345,7 +341,7 @@ if ($HasEnrolledGateways -eq $true)
             },
             @{
                 protocol = "Icmp"
-                description = "PiHole"
+                description = "Icmp"
             }
         )
         gateways = @()
