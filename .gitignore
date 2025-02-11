@@ -43,3 +43,6 @@ config.json
 .ssh/
 id_rsa
 id_rsa.pub
+
+# Ignore generated stacks
+stacks/
