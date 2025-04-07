@@ -301,14 +301,9 @@ $policiesModel = @(
         )
         acls = @(
             @{
-                protocol = "Udp"
-                ports = "53"
-                description = "DNS"
-            },
-            @{
                 protocol = "Tcp"
-                ports = "80"
-                description = "PiHole Sync"
+                ports = "1080"
+                description = "PiHole API Configuration Sync"
             },
             @{
                 protocol = "Icmp"
