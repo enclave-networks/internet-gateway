@@ -30,23 +30,7 @@ http://dnsfilter.enclave {
 			header * Content-Disposition "attachment"
 			file_server
 		}
-		redir * https://{host}
-	}
-}
-
-# HTTPS admin access, proxied directly to PiHole instances
-https://dnsfilter.enclave:444 {
-	bind {$PIHOLE_PROXY_BIND_ADDR}
-	tls internal
-
-	reverse_proxy {
-		to {$PIHOLE_LB_UPSTREAM_LIST}
-
-		header_up Host {upstream_hostport}
-
-		lb_policy first
-		lb_try_duration 5s
-		fail_duration 30s
+		redir * https://{host}/admin/
 	}
 }
 
@@ -59,7 +43,7 @@ https:// {
 
 	@dnsfilter host dnsfilter.enclave
 	handle @dnsfilter {
-		redir * https://{host}:444
+		redir * https://{host}:444/admin
 	}
 
 	@blocked host blocked.enclave
@@ -74,5 +58,21 @@ https:// {
 	# Default fallback for all other HTTPS access
 	handle {
 		redir https://blocked.enclave
+	}
+}
+
+# Load-balanced access to pihole admin dashboard. Always targets the primary first as config is replicated.
+https://dnsfilter.enclave:444 {
+	bind {$PIHOLE_PROXY_BIND_ADDR}
+	tls internal
+
+	reverse_proxy {
+		to {$PIHOLE_LB_UPSTREAM_LIST}
+
+		header_up Host {upstream_hostport}
+
+		lb_policy first
+		lb_try_duration 5s
+		fail_duration 30s
 	}
 }
