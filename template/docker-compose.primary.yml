@@ -42,6 +42,8 @@ services:
       - etc-dnsmasq:/etc/dnsmasq.d
       hostname: ${PIHOLE_HOSTNAME}
       mem_limit: 150M
+      cap_add:
+       - CAP_SYS_TIME
       restart: unless-stopped
       ports:
       - "${ENCLAVE_LOCAL_PORT}:${ENCLAVE_LOCAL_PORT}/tcp"
@@ -54,19 +56,18 @@ services:
        gw-net:
       environment:
         TZ: 'Europe/London'
-        WEBPASSWORD: ''
-        WEB_PORT: 1080
-        # Traffic to the pihole admin interface is
-        # proxied through caddy (to apply HTTPS and handle redirects).
-        # Restrict the web interface to only be available via that proxy.
-        WEB_BIND_ADDR: 127.0.0.1
-        CORS_HOSTS: dnsfilter.enclave
-        DNSMASQ_LISTENING: all
-        FTLCONF_LOCAL_IPV4: ${ENCLAVE_VIRTUAL_IP}
-        FTLCONF_BLOCK_IPV4: ${ENCLAVE_VIRTUAL_IP}
-        FTLCONF_BLOCKINGMODE: IP-NODATA-AAAA
-        FTLCONF_PIHOLE_PTR: NONE
-        FTLCONF_MAXDBDAYS: 30
+        FTLCONF_webserver_api_password: ''
+        FTLCONF_webserver_port: 1080
+        # Traffic to the pi-hole admin interface is proxied through Caddy to apply HTTPS and handle redirects,
+        # so we restrict the pi-hole admin interface to only be available via the Caddy proxy.
+        FTLCONF_dns_interface: '127.0.0.1'
+        FTLCONF_dns_domain: 'dnsfilter.enclave'
+        FTLCONF_dns_piholePTR: NONE
+        FTLCONF_dns_listeningMode: all
+        FTLCONF_dns_blocking_mode: IP_NODATA_AAAA
+        FTLCONF_dns_reply_host_IPv4: ${ENCLAVE_VIRTUAL_IP}
+        FTLCONF_dns_reply_blocking_IPv4: ${ENCLAVE_VIRTUAL_IP}
+        FTLCONF_database_maxDBdays: 30
 
   pihole-enclave-sync:
       image: enclavenetworks/pihole-enclave-sync:latest
@@ -101,11 +102,11 @@ services:
     cpu_count: 1
     environment:
       PIHOLE_PROXY_BIND_ADDR: ${ENCLAVE_VIRTUAL_IP}
-      PIHOLE_LB_UPSTREAM_LIST: http://primary.dns.internal:9999 http://secondary.dns.internal:9999
+      PIHOLE_LB_UPSTREAM_LIST: http://primary.dns.internal:1080 http://secondary.dns.internal:1080
 
   # Only on primary
-  orbital-sync:
-    image: mattwebbio/orbital-sync:1
+  nebula-sync:
+    image: ghcr.io/lovelaze/nebula-sync:latest
     network_mode: 'service:pihole'
     mem_limit: 50M
     depends_on:
@@ -115,27 +116,12 @@ services:
         condition: service_started
     cpu_count: 1
     environment:
-      PRIMARY_HOST_BASE_URL: 'http://primary.dns.internal:9999'
-      PRIMARY_HOST_PASSWORD: ''
-      PRIMARY_HOST_PATH: '/'
-      SECONDARY_HOST_1_BASE_URL: 'http://secondary.dns.internal:9999'
-      SECONDARY_HOST_1_PASSWORD: ''
-      SECONDARY_HOST_1_PATH: '/'
-      INTERVAL_MINUTES: 30
-
-      # See https://github.com/mattwebbio/orbital-sync/blob/master/src/config/schema.ts
-      SYNC_WHITELIST: true          # Copies the whitelist
-      SYNC_REGEX_WHITELIST: true    # Copies the regex whitelist
-      SYNC_BLACKLIST: true          # Copies the blacklist
-      SYNC_REGEXLIST: true          # Copies the regex blacklist
-      SYNC_ADLIST: true             # Copies adlists
-      SYNC_CLIENT: false            # Copies clients
-      SYNC_GROUP: true              # Copies groups
-      SYNC_AUDITLOG: true           # Copies the audit log
-      SYNC_STATICDHCPLEASES: true   # Copies static DHCP leases
-      SYNC_LOCALDNSRECORDS: false   # Copies local DNS records
-      SYNC_LOCALCNAMERECORDS: false # Copies local CNAME records
-      SYNC_FLUSHTABLES: true        # Clears existing data on the secondary (copy target) Pi-hole
+    - PRIMARY=http://primary.dns.internal|
+    - REPLICAS=http://secondary.dns.internal|
+    - FULL_SYNC=true
+    - RUN_GRAVITY=true
+    - CLIENT_SKIP_TLS_VERIFICATION=true
+    - CRON=* * * * * # Every hour: 0 * * * *
 
 volumes:
   enclave-config:

@@ -307,8 +307,8 @@ $policiesModel = @(
             },
             @{
                 protocol = "Tcp"
-                ports = "9999"
-                description = "PiHole Gravity Database Sync"
+                ports = "80"
+                description = "PiHole Sync"
             },
             @{
                 protocol = "Icmp"
