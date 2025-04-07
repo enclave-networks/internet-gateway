@@ -116,12 +116,14 @@ services:
         condition: service_started
     cpu_count: 1
     environment:
-    - PRIMARY=http://primary.dns.internal|
-    - REPLICAS=http://secondary.dns.internal|
-    - FULL_SYNC=true
+    - PRIMARY=http://primary.dns.internal:1080|
+    - REPLICAS=http://secondary.dns.internal:1080|
+    - FULL_SYNC=false
     - RUN_GRAVITY=true
     - CLIENT_SKIP_TLS_VERIFICATION=true
     - CRON=* * * * * # Every hour: 0 * * * *
+    - SYNC_CONFIG_DNS=false # Config items set by ENV var cannot be changed, produces a 400 from the far-side API if not set
+    - SYNC_CONFIG_DATABASE=false
 
 volumes:
   enclave-config:
