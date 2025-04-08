@@ -256,7 +256,7 @@ $policiesModel = @(
             @{
                 protocol = "Tcp"
                 ports = "444"
-                description = "PiHole"
+                description = "Load-balanced access to PiHole admin dashboard"
             },
             @{
                 protocol = "Icmp"
