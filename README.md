@@ -195,10 +195,13 @@ To test if your network traffic is successfully routing through the Internet Gat
 
 ## Operational notes
 
-- Failover between gateways is automatic. If one fails or goes offline, connected systems will automatically switch.
-- You may need to disable `Use secure DNS` in Chrome (`chrome://settings/security`) to stop it sending DNS queries directly to Google nameservers.
-- Notice the `300M` docker [memory limit](https://github.com/enclave-networks/internet-gateway/blob/main/template/docker-compose.primary.yml#L13) applied to the Enclave container and increase as required.
-- Only make PiHole configuration changes on the _primary_ gateway as the PiHole configuration in [synced](https://github.com/enclave-networks/internet-gateway/blob/main/template/docker-compose.primary.yml#L124) _from_ the primary to the secondary every 30 minutes.
+- Failover between gateways is automatic.
+- If one gateway fails or goes offline, connected systems will immediately and automatically switch to the partner.
+- When the primary gateway recovers, connected systems will automatically fail back to it.
+- You may need to disable `Use secure DNS` in Chrome (`chrome://settings/security`) to stop Chrome sending DNS queries directly to Google nameservers and bypassing DNS.
+- Only make PiHole configuration changes on the _primary_ gateway as the PiHole configuration in [synced](https://github.com/enclave-networks/internet-gateway/blob/main/template/docker-compose.primary.yml#L124) _from_ the primary to the secondary every minute.
+- Any changes made to the secondary gateway will be destroyed during the next sync from the primary.
+- Notice the `300M` docker [memory limit](https://github.com/enclave-networks/internet-gateway/blob/main/template/docker-compose.primary.yml#L13) applied to the Enclave container. Monitor and increase if necessary.
 
 ## Inspection
 
@@ -212,7 +215,7 @@ sudo iptables -t nat -L POSTROUTING -v -n
 
 ### Uninstall
 
-!!! Warning: Read these commands **BEFORE** you run them. If you don't understand exactly what they will do, contact us on our support channels for assistance.
+!!! Warning: Read these commands **BEFORE** you run them. If you don't understand exactly what they will do, contact our support channels for assistance.
 
 ```bash
 sudo docker stop $(sudo docker ps -q) && sudo docker rm $(sudo docker ps -aq)
