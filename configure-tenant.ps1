@@ -342,7 +342,7 @@ if ($HasEnrolledGateways -eq $true)
         gateways = @()
         gatewayTrafficDirection = "Exit"
         gatewayAllowedIpRanges = @()
-        gatewayPriority = "Balanced"
+        gatewayPriority = "Ordered"
     }
 
     if ($HasPrimaryGateway -eq $true)
