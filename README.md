@@ -203,7 +203,7 @@ To test if your network traffic is successfully routing through the Internet Gat
 - Any changes made to the secondary gateway will be destroyed during the next sync from the primary.
 - Notice the `300M` docker [memory limit](https://github.com/enclave-networks/internet-gateway/blob/main/template/docker-compose.primary.yml#L13) applied to the Enclave container. Monitor and increase if necessary.
 - To bring the stack down: `sudo docker compose down`
-- To bring the stack up with latest images: `docker compose up -d --pull always`
+- To bring the stack up with latest images: `sudo docker compose up -d --pull always`
 
 ## Inspection
 
