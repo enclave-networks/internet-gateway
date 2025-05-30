@@ -202,6 +202,8 @@ To test if your network traffic is successfully routing through the Internet Gat
 - Only make PiHole configuration changes on the _primary_ gateway as the PiHole configuration in [synced](https://github.com/enclave-networks/internet-gateway/blob/main/template/docker-compose.primary.yml#L124) _from_ the primary to the secondary every minute.
 - Any changes made to the secondary gateway will be destroyed during the next sync from the primary.
 - Notice the `300M` docker [memory limit](https://github.com/enclave-networks/internet-gateway/blob/main/template/docker-compose.primary.yml#L13) applied to the Enclave container. Monitor and increase if necessary.
+- To bring the stack down: `sudo docker compose down`
+- To bring the stack up with latest images: `docker compose up -d --pull always`
 
 ## Inspection
 
