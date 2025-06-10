@@ -41,7 +41,7 @@ services:
       - ./etc/pihole:/etc/pihole
       - etc-dnsmasq:/etc/dnsmasq.d
       hostname: ${PIHOLE_HOSTNAME}
-      mem_limit: 150M
+      # mem_limit: 300M
       cap_add:
        - CAP_SYS_TIME
       restart: unless-stopped
