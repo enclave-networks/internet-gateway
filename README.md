@@ -14,6 +14,10 @@ You will need:
     git clone https://github.com/enclave-networks/internet-gateway.git
     ```
 
+1. Customise your DNS block page (`./template/blockpage/index.html`) as required
+
+    ![Block Page Example](blockpage-example.png)
+
 1. Install Enclave, Docker, and other dependencies
 
     ```bash
