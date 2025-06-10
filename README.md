@@ -173,25 +173,32 @@ Done
 
 If changes are accidentally made to any of these policies in the future, running the `configure-tenant.ps1` script again will attempt to automatically detect the drift and refresh the correct configuration into the tenant.
 
-## Testing and installing root certificate
+## Testing
 
-There are three new Tags in the tenant:
+Once your Internet Gateways are configured, you'll need to test them to ensure everything is working properly. This setup will have created three new Tags in your tenant:
 
-- `[internet-gateway]` - Applied to the Internet Gateways themselves.
-- `[internet-gateway-user]` - Should be applied to end-users.
-- `[internet-gateway-admin]` - A special tag for Internet Gateway administrators only.
+- `[internet-gateway]` - Applied to the Internet Gateways themselves (automatically configured)
+- `[internet-gateway-user]` - Apply this to end-user systems that should route traffic, DNS queries, or both through the Gateways
+- `[internet-gateway-admin]` - Apply this to administrator systems for management access to the PiHole Admin interface
 
-Enrol yourself to the tenant and attach the `[internet-gateway-admin]` tag to your system. You'll now be able to access [http://dnsfilter.enclave](http://dnsfilter.enclave) - the PiHole administration interface.
+Enrol a system to the tenant and attach the `[internet-gateway-admin]` tag to that system for testing. With your admin-tagged system, you should now be able to access the PiHole administration interface:
 
+- **Load-balanced URL**: [http://dnsfilter.enclave](http://dnsfilter.enclave)
 
-We recommend downloading and installing the Gateway's Root Certificate so your browser can trust the block page ([https://blocked.enclave/](https://blocked.enclave/)).
+- **Direct access URLs** (for troubleshooting):
+  - Primary gateway: http://100.64.0.2:1080/
+  - Secondary gateway: http://100.64.0.3:1080/
+
+## Installing Root Certificates
+
+We recommend downloading and installing the Gateway's Root Certificate so your browser can trust the block page (served from [https://blocked.enclave/](https://blocked.enclave/)).
 
 Download the Internet Gateway CA's public certificate in the appropriate format for yourself and end-users:
 
 - http://dnsfilter.enclave/gateway.crt
 - http://dnsfilter.enclave/gateway.p7b
 
-On Windows, use the `certmgr` tool to install `gateway.crt` into the `Trusted Root Certification Authorities` store using the `LOCAL COMPUTER` scope and restart your browser. Navigate to [http://dnsfilter.enclave](http://dnsfilter.enclave) and check you don't receive any certificate warnings.
+On Windows, use the `certmgr` tool to install `gateway.crt` into the `Trusted Root Certification Authorities` store using the `LOCAL COMPUTER` scope and restart your browser. Test by visiting [http://dnsfilter.enclave](http://dnsfilter.enclave) - you shouldn't receive any certificate warnings.
 
 To test if your network traffic is successfully routing through the Internet Gateway, check your external IP address and then apply the `[internet-gateway-user]` tag to your system. Your Internet traffic should now be routing through the Internet Gateways and your external IP address should have changed to present as that of the primary Internet Gateway.
 
