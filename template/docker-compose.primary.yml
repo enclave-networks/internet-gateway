@@ -129,7 +129,7 @@ services:
     - SYNC_CONFIG_DATABASE=true                 # Keep false - Config items are set by ENV vars and cannot be changed
     - SYNC_CONFIG_MISC=true                     # Sync miscellaneous settings like nice levels
     - SYNC_CONFIG_DEBUG=false                   # Keep debug settings host-specific
-    
+
     # Gravity/blocking synchronisation
     - SYNC_GRAVITY_GROUP=true                   # Sync groups for organisation
     - SYNC_GRAVITY_AD_LIST=true                 # Sync blocklists/allowlists
