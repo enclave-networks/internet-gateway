@@ -4,7 +4,7 @@
     <title>Site Blocked</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-        
+
         body {
             margin: 0;
             padding: 0;
@@ -16,7 +16,7 @@
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             min-height: 640px;
         }
-                
+
         a {
             color: #30A9F6;
             text-decoration: none;
@@ -35,7 +35,7 @@
             border-radius: 16px;
             box-shadow: 0 8px 40px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.08);
         }
-        
+
         h1 {
             color: #1e293b;
             font-size: 1.75rem;
@@ -44,7 +44,7 @@
             margin-bottom: 0.75rem;
             letter-spacing: -0.025em;
         }
-        
+
         h2 {
             color: #475569;
             font-size: 1.125rem;
@@ -53,22 +53,12 @@
             margin-bottom: 1.25rem;
             letter-spacing: -0.015em;
         }
-        
+
         p {
             color: #64748b;
             font-size: 1rem;
             line-height: 1.6;
             margin-bottom: 1rem;
-        }
-        
-        .msp-logo {
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .msp-logo img {
-            max-width: 320px;
-            max-height: 70px;
         }
 
         .msp-info {
@@ -77,7 +67,7 @@
             border-top: 1px solid #e2e8f0;
             text-align: left;
         }
-        
+
         .msp-info ul {
             text-align: left;
             color: #64748b;
@@ -88,7 +78,7 @@
         .msp-info li {
             margin-bottom: 0.5rem;
         }
-        
+
         .ticket-info {
             background: #f8fafc;
             padding: 1.25rem;
@@ -98,18 +88,23 @@
             border: 1px solid #e2e8f0;
             text-align: center;
         }
-        
+
         .ticket-info strong {
             color: #334155;
         }
+
+        .ticket-info img {
+            max-width: 320px;
+            max-height: 40px;
+            padding: 0.5rem 0 1.5rem  0;
+            display: block;
+            margin: auto;
+        }
+
     </style>
 </head>
 <body>
     <div class="content">
-        <div class="msp-logo">
-            <img src="https://placehold.co/320x70/transparent/333" alt="placeholder">
-            <!-- <img src="data:image/png;base64,YOUR_BASE64_STRING_HERE" alt="placeholder"> -->
-        </div>
         <h1>This site isn't accessible right now.</h1>
         <p>Content filtering is actively protecting our network, and this website has been identified as inappropriate, potentially unsafe, or malicious.</p>
         
@@ -121,7 +116,10 @@
                 <li>Tickets are typically reviewed within 24 hours</li>
             </ul>
             <p class="ticket-info">
-                <strong>Raise a ticket to request access at </strong><a href="https://example.com" target="_blank">example.com</a>
+                <img src="https://placehold.co/320x70/transparent/333" alt="placeholder">
+                <!-- <img src="data:image/png;base64,YOUR_BASE64_STRING_HERE" alt="placeholder"> -->
+                 
+                <strong>To request access to this site, please raise a ticket at <br /><a href="https://example.com" target="_blank">https://example.com</a></strong>
             </p>
         </div>
     </div>
