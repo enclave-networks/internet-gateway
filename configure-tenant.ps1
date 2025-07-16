@@ -256,7 +256,12 @@ $policiesModel = @(
             @{
                 protocol = "Tcp"
                 ports = "444"
-                description = "PiHole"
+                description = "Load-balanced access to PiHole admin dashboard"
+            },
+            @{
+                protocol = "Tcp"
+                ports = "1080"
+                description = "Direct access to PiHole dashboard"
             },
             @{
                 protocol = "Icmp"
@@ -301,14 +306,9 @@ $policiesModel = @(
         )
         acls = @(
             @{
-                protocol = "Udp"
-                ports = "53"
-                description = "DNS"
-            },
-            @{
                 protocol = "Tcp"
-                ports = "9999"
-                description = "PiHole Gravity Database Sync"
+                ports = "1080"
+                description = "PiHole API Configuration Sync"
             },
             @{
                 protocol = "Icmp"
@@ -347,7 +347,7 @@ if ($HasEnrolledGateways -eq $true)
         gateways = @()
         gatewayTrafficDirection = "Exit"
         gatewayAllowedIpRanges = @()
-        gatewayPriority = "Balanced"
+        gatewayPriority = "Ordered"
     }
 
     if ($HasPrimaryGateway -eq $true)
