@@ -39,3 +39,18 @@ else
   echo "iptables snat rule $BRIDGE_NETWORK for this stack already exists, nothing to do."
 
 fi
+
+# persist the iptables rules so the snat rule survives a host reboot. This runs
+# even when the rule already existed so hosts deployed before iptables-persistent
+# was installed pick up persistence on the next run of this script.
+if command -v netfilter-persistent >/dev/null 2>&1; then
+
+    echo "Saving iptables rules to /etc/iptables so the snat rule persists across reboot"
+
+    netfilter-persistent save
+
+else
+
+  echo "Warning: netfilter-persistent not found, the snat rule will NOT survive a host reboot. Install it with: apt install -y iptables-persistent"
+
+fi

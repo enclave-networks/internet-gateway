@@ -35,6 +35,13 @@ if [ "$DO_PREPARE_OS" = "true" ]; then
     apt install -y needrestart
     apt install -y gcc make tzdata jq iputils-ping net-tools iperf3 tcpdump telnet unzip wget screen software-properties-common gnupg speedtest-cli
 
+    # Install iptables-persistent so the SNAT rule added by initialise-bridge-network.sh
+    # survives a host reboot. Preseed debconf so the install doesn't prompt.
+    echo 'iptables-persistent iptables-persistent/autosave_v4 boolean true' | debconf-set-selections
+    echo 'iptables-persistent iptables-persistent/autosave_v6 boolean true' | debconf-set-selections
+    apt install -y iptables-persistent
+    systemctl enable netfilter-persistent
+
     timedatectl set-ntp on
     timedatectl set-timezone UTC
 
