@@ -217,6 +217,17 @@ To test if your network traffic is successfully routing through the Internet Gat
 - To bring the stack up with latest images: `sudo docker compose up -d --pull always`
 - To rename the stack, edit `COMPOSE_PROJECT_NAME=` variable in `.env`
 
+## Updating a single container
+
+To update one container in an existing stack without updating the others, run these from the stack directory. For example, to update only the `enclave` container:
+
+```bash
+sudo docker compose pull enclave
+sudo docker compose up -d --no-deps --force-recreate enclave
+```
+
+Replace `enclave` with the service you want to update, for example `caddy` or `pihole-enclave-sync`. The other containers share the `pihole` container's network, so update `pihole` with the whole stack instead (`sudo docker compose up -d --pull always`).
+
 ## Inspection
 
 To inspect the running environment, the docker commands `ps`, `exec`, `stats` qand `logs` can be helpful.
