@@ -131,6 +131,8 @@ docker bridge network uwhzjej7gw_n for this stack already exists, nothing to do.
 iptables snat rule 172.17.0.0/16 for this stack already exists, nothing to do.
 ```
 
+The iptables SNAT rule is runtime state and would otherwise be lost on reboot, so the script finishes by running `netfilter-persistent save` to write the current rules to `/etc/iptables/rules.v4`, where they are restored automatically at boot. `prepare-host.sh` installs `iptables-persistent` for this. If the script warns that `netfilter-persistent` is missing, install it and rerun the script, otherwise the gateway containers will forward traffic without NAT after the next host reboot.
+
 Now we can ask Docker to bring the primary gateway online:
 
 ```bash
@@ -216,6 +218,7 @@ To test if your network traffic is successfully routing through the Internet Gat
 - To bring the stack down: `sudo docker compose down`
 - To bring the stack up with latest images: `sudo docker compose up -d --pull always`
 - To rename the stack, edit `COMPOSE_PROJECT_NAME=` variable in `.env`
+- The SNAT rule created by `initialise-bridge-network.sh` is persisted with `netfilter-persistent save`. If you change iptables rules by hand, run `sudo netfilter-persistent save` afterwards or the change will be lost on reboot. To check what will be restored at boot, run `cat /etc/iptables/rules.v4`.
 
 ## Updating a single container
 
@@ -247,5 +250,6 @@ sudo docker stop $(sudo docker ps -q) && sudo docker rm $(sudo docker ps -aq)
 sudo docker network rm $(sudo docker network ls -q)
 sudo docker volume rm $(docker volume ls -qf dangling=true)
 sudo iptables -t nat -S POSTROUTING | grep "_n" | sed 's/^-A /-D /' | while read -r line; do sudo iptables -t nat $line; done
+sudo netfilter-persistent save
 sudo rm -rf ./stacks/
 ```
