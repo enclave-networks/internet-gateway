@@ -10,11 +10,13 @@
 	}
 }
 
+# Redirect all plain HTTP to blocked page
 http:// {
 	bind {$PIHOLE_PROXY_BIND_ADDR}
 	redir http://blocked.enclave
 }
 
+# Serve cert files over HTTP
 http://dnsfilter.enclave {
 	bind {$PIHOLE_PROXY_BIND_ADDR}
 	route {
@@ -28,11 +30,38 @@ http://dnsfilter.enclave {
 			header * Content-Disposition "attachment"
 			file_server
 		}
-
-		redir * https://{host}
+		redir * https://{host}/admin/
 	}
 }
 
+# Catch-all HTTPS handler for certs, blocked page, and redirects
+https:// {
+	bind {$PIHOLE_PROXY_BIND_ADDR}
+	tls internal {
+		on_demand
+	}
+
+	@dnsfilter host dnsfilter.enclave
+	handle @dnsfilter {
+		redir * https://{host}:444/admin
+	}
+
+	@blocked host blocked.enclave
+	handle @blocked {
+		header {
+			X-Frame-Options "DENY"
+		}
+		root * /blockpage
+		file_server
+	}
+
+	# Default fallback for all other HTTPS access
+	handle {
+		redir https://blocked.enclave
+	}
+}
+
+# Load-balanced access to pihole admin dashboard. Always targets the primary first as config is replicated.
 https://dnsfilter.enclave:444 {
 	bind {$PIHOLE_PROXY_BIND_ADDR}
 	tls internal
@@ -46,41 +75,4 @@ https://dnsfilter.enclave:444 {
 		lb_try_duration 5s
 		fail_duration 30s
 	}
-}
-
-# This is the 'end' of the chain; and points at the actual running pihole instance on the local host.
-http://:9999 {
-	bind {$PIHOLE_PROXY_BIND_ADDR}
-
-	reverse_proxy http://localhost:1080
-	rewrite * /admin/{path}
-}
-
-https:// {
-
-    bind {$PIHOLE_PROXY_BIND_ADDR}
-
-    tls internal {
-        on_demand
-    }
-
-    @dnsfilter host dnsfilter.enclave
-
-    handle @dnsfilter {
-        redir * https://{host}:444
-    }
-
-    @blocked host blocked.enclave
-
-    handle @blocked {
-        header {
-            X-Frame-Options "DENY"
-        }
-        root * /blockpage
-        file_server
-    }
-
-    handle {
-        redir https://blocked.enclave
-    }
 }
