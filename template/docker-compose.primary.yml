@@ -41,7 +41,7 @@ services:
       - ./etc/pihole:/etc/pihole
       - etc-dnsmasq:/etc/dnsmasq.d
       hostname: ${PIHOLE_HOSTNAME}
-      # mem_limit: 300M
+      # mem_limit: 300M  # no limit: if pihole hits it, pihole is killed and restarted, which cuts the containers sharing its network off until they are restarted too
       cap_add:
        - CAP_SYS_TIME
       restart: unless-stopped
